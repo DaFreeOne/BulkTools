@@ -1,0 +1,123 @@
+{
+"anti-PD1" : {  
+    "T_cell_inflammed" : {
+        "geneset" : {
+            "PSMB10" : 1,
+            "HLA-DRA" : 1, 
+            "CMKLR1" : 1, 
+            "HLA-E" : 1, 
+            "CXCL9" : 1, 
+            "CXCL10" : 1, 
+            "IDO1" : 1, 
+            "CXCR6" : 1, 
+            "CD27" : 1, 
+            "CCL5" : 1, 
+            "NKG7" : 1, 
+            "STAT1" : 1, 
+            "GZMB" : 1, 
+            "HLA-B" : 1, 
+            "CD8A" : 1, 
+            "PRF1" : 1, 
+            "LAG3" : 1, 
+            "CD276" : 1},
+        "source" : "https://doi.org/10.1172/JCI91190",
+        "Author" :"Mark Ayers et al."},
+
+    "IFNg_short" : {
+        "geneset" : {
+            "IDO1" : 1,
+            "CXCL10" : 1,
+            "CXCL9" : 1,
+            "HLA-DRA" : 1,
+            "STAT1" : 1,
+            "IFNG" : 1},
+        "source" : "https://doi.org/10.1172/JCI91190", 
+        "Author" : "Mark Ayers et al."},
+
+    "IFNg_long" : {
+        "geneset" : {
+            "CD3D" : 1,
+            "IDO1" : 1,
+            "CIITA" : 1,
+            "CD3E" : 1,
+            "CCL5" : 1,
+            "GZMK" : 1,
+            "CD2" : 1,
+            "HLA-DRA" : 1,
+            "CXCL13" : 1,
+            "IL2RG" : 1,
+            "NKG7" : 1,
+            "HLA-E" : 1,
+            "CXCR6" : 1,
+            "LAG3" : 1,
+            "TAGAP" : 1,
+            "CXCL10" : 1,
+            "STAT1" : 1,
+            "GZMB" : 1},
+        "source" : "https://doi.org/10.1172/JCI91190", 
+        "Author" : "Mark Ayers et al."},
+    "LB_ICA" : {
+        "geneset" : {
+            "JCHAIN" : 1,
+            "CXCL13" : 1,
+            "IGHM" : 1, 
+            "IGHV3-21" : 1, 
+            "IGHV4-4" : 1, 
+            "IGHV1-46" : 1
+            },
+        "source" : "Top weight genes LB component ICA.", 
+        "Author" : "Quentin."},
+    "medium_CTA_ICA" : {
+        "geneset" : {
+            "XAGE1A" : 1, "CTAG2" : 1,
+            "MAGEA3" : 1,
+            "MAGEC1" : 1,
+            "MAGEA10" : 1,
+            "MAGEA4" : 1,
+            "CSAG3" : 1,
+            "MAGEA2B" : 1,
+            "MAGEA6" : 1,
+            "MAGEA12" : 1,
+            "MAGEC2" : 1,
+            "CSAG1" : 1,
+            "MAGEA1" : 1,
+            "MAGEA2" : 1,
+            "GAGE12F" : 1,
+            "CTAG1A" : 1,
+            "MAGEA11" : 1
+            },
+        "source" : "Top weight genes LB component ICA.", 
+        "Author" : "Quentin."},
+    "signif_CTA_ICA" : {
+        "geneset" : {
+            "MAGEC2" : 1, 
+            "XAGE1A" : 1, 
+            "MAGEA10" : 1, 
+            "MAGEA4" : 1
+        },
+        "source" : "Top weight genes and most correlated with response on CTA component ICA.", 
+        "Author" : "Quentin."}
+},
+"Other" : {
+    "BSG_stuff" : {
+        "geneset" : {
+            "BSG" : -1,
+            "DDR1" : -1,
+            "FERMT3" : 1
+            },
+        "source" : "Samia and co",
+        "Author" : "Samia and coco"
+        },
+    "BSG_stuff2" : {
+        "geneset" : {
+            "BSG" : 1,
+            "DDR1" : 1,
+            "FERMT3" : 1
+            },
+        "source" : "Samia and co",
+        "Author" : "Samia and coco"
+        }
+    }
+}
+
+

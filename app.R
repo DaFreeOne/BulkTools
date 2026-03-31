@@ -1,0 +1,39 @@
+library(shiny)
+library(shinyFiles)
+library(bslib)
+library(DT)
+
+app_dir <- normalizePath(getwd())
+
+source(file.path(app_dir, "R_util", "conversion_func.R"))
+source(file.path(app_dir, "R_util", "analysis_func.R"))
+source(file.path(app_dir, "R_util", "genesets.R"))
+source(file.path(app_dir, "R_util", "reading_func.R"))
+source(file.path(app_dir, "R_analysis", "DEGSEA.R"))
+source(file.path(app_dir, "R_analysis", "signature_projection.R"))
+source(file.path(app_dir, "shiny_modules", "mod_DEGSEA.R"))
+source(file.path(app_dir, "shiny_modules", "mod_signature_projection.R"))
+source(file.path(app_dir, "shiny_modules", "mod_anchored_GSEA.R"))
+
+options(shiny.maxRequestSize = 4096 * 1024^2) # Max supported input file size
+
+ui <- page_navbar(
+  nav_panel("Welcome "),
+  nav_panel("DEGSEA", mod_degsea_ui("degsea")),
+  nav_panel("Signature Projection", mod_signature_proj_ui("sign_proj")),
+  nav_panel("Anchored GSEA", mod_anchored_gsea_ui("anchored_gsea"))
+
+#   nav_panel("GSVA", mod_gsva_ui("gsva"))  # later
+)
+
+server <- function(input, output, session) {
+  roots <- c(home = "~")
+
+  mod_degsea_server("degsea", roots = roots)
+  mod_signature_proj_server("sign_proj", roots = roots)
+  mod_anchored_gsea_server("anchored_gsea", roots = roots)
+
+  # mod_gsva_server("gsva", roots = roots)
+}
+
+shinyApp(ui, server)
