@@ -13,6 +13,6 @@ URL > http://localhost:5288
 WITH DOCKER : 
 1) Build the Docker : 
 Move yourself so that you are in the same directory as the DockerFile
-sh > docker build -t shiny_docker -f DockerFile .
+sh > docker build -t shiny_docker .
 
 2) Run the Docker :
