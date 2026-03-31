@@ -62,13 +62,15 @@ RUN conda install -y -n BulkTools \
     --channel bioconda \
     --strict-channel-priority \
     r-tidyverse \
+    r-reticulate \
     bioconductor-org.hs.eg.db \
     bioconductor-tximport \
     bioconductor-genomeinfodb \
     bioconductor-annotationdbi \
     bioconductor-fgsea \
     bioconductor-gsva \
-    bioconductor-deseq2
+    bioconductor-deseq2 \
+    bioconductor-limma
 
 # test
 RUN conda run -n BulkTools R -q -e "library(shiny); library(shinyFiles); library(fs); library(optparse); library(tidyestimate); library(tidyverse); library(org.Hs.eg.db); library(tximport); library(GenomeInfoDb); library(AnnotationDbi); library(fgsea); library(GSVA); library(DESeq2); library(jsonlite); library(data.table); library(Matrix); cat('Docker image OK\\n')"

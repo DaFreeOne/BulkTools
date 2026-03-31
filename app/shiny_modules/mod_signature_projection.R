@@ -150,9 +150,8 @@ mod_signature_proj_server <- function(id, roots = c(home = "~")) {
   moduleServer(id, function(input, output, session) {
     library(reticulate)
     Sys.unsetenv("RETICULATE_PYTHON")
-    use_condaenv("myShiny", required = TRUE)
+    use_python("/opt/conda/envs/BulkTools/bin/python", required = TRUE)
     source_python("py/py_plots.py")
-
 
     clinic_df <- reactive({
       read_delim_auto(input$clinic_file)

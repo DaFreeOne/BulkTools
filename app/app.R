@@ -6,7 +6,7 @@ library(DT)
 app_dir <- normalizePath(getwd())
 
 source(file.path(app_dir, "R_util", "conversion_funcs.R"))
-source(file.path(app_dir, "R_util", "analysis_funcs.R"))
+source(file.path(app_dir, "R_util", "util_funcs.R"))
 source(file.path(app_dir, "R_util", "genesets.R"))
 source(file.path(app_dir, "R_util", "reading_funcs.R"))
 source(file.path(app_dir, "R_analysis", "DEGSEA.R"))

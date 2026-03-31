@@ -3,8 +3,6 @@ library(fgsea)
 library(tidyestimate)
 library(limma)
 
-source("/home/quentin/01_PROJETS/01_Predimel/util_func.R")
-source("/home/quentin/01_PROJETS/01_Predimel/genesets.R")
 set.seed(69)
 
 
