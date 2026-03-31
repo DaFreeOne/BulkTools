@@ -1,9 +1,0 @@
-Run the app :
-
-1) Run in R terminal :
-shiny::runApp(host = "0.0.0.0", port = 5288, launch.browser = FALSE)
-
-
-2) Open in browser :
-http://localhost:5288
-

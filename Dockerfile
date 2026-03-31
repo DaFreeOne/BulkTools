@@ -56,5 +56,5 @@ COPY REF_DATA/ app/REF_DATA/
 
 EXPOSE 5288
 
-ENTRYPOINT ["R", "-e", "shiny::runApp('/app', host='0.0.0.0', port=5288, launch.browser=TRUE)"]
+ENTRYPOINT ["Rscript", "/app/demarreur_app.R"]
 
