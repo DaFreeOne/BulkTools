@@ -54,13 +54,14 @@ RUN conda run -n BulkTools conda install -y -c conda-forge \
 RUN conda run -n BulkTools pip install --no-cache-dir -r /app/requirements_py.txt
 
 # CRAN-ish packages
-RUN conda run -n BulkTools R -q -e "install.packages(c('optparse','ggplot2','tidyverse','dplyr','tidyestimate','DT','bslib','jsonlite','data.table','Matrix'), repos='https://cloud.r-project.org', Ncpus=max(1, parallel::detectCores()-1))"
+RUN conda run -n BulkTools R -q -e "install.packages(c('optparse','ggplot2','dplyr','tidyestimate','DT','bslib','jsonlite','data.table','Matrix'), repos='https://cloud.r-project.org', Ncpus=max(1, parallel::detectCores()-1))"
 
 # Download R libraries through conda bioconductor
 RUN conda install -y -n BulkTools \
     --channel conda-forge \
     --channel bioconda \
     --strict-channel-priority \
+    r-tidyverse \
     bioconductor-org.hs.eg.db \
     bioconductor-tximport \
     bioconductor-genomeinfodb \
@@ -70,7 +71,7 @@ RUN conda install -y -n BulkTools \
     bioconductor-deseq2
 
 # test
-RUN conda run -n BulkTools R -q -e "library(shiny); library(shinyFiles); library(fs); library(optparse); library(tidyestimate); library(org.Hs.eg.db); library(tximport); library(GenomeInfoDb); library(AnnotationDbi); library(fgsea); library(GSVA); library(DESeq2); library(jsonlite); library(data.table); library(Matrix); cat('Docker image OK\\n')"
+RUN conda run -n BulkTools R -q -e "library(shiny); library(shinyFiles); library(fs); library(optparse); library(tidyestimate); library(tidyverse); library(org.Hs.eg.db); library(tximport); library(GenomeInfoDb); library(AnnotationDbi); library(fgsea); library(GSVA); library(DESeq2); library(jsonlite); library(data.table); library(Matrix); cat('Docker image OK\\n')"
 
 COPY demarreur_app.R /app/demarreur_app.R
 COPY app/ /app/

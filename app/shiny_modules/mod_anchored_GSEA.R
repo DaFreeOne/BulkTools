@@ -1,6 +1,5 @@
 # shiny_modules/mod_DEGSEA.R
 mod_anchored_gsea_ui <- function(id) {
-  source("/home/quentin/01_PROJETS/43_Shiny_bis/R_analysis/anchored_GSEA.R")
   ns <- NS(id)
 
   page_sidebar(

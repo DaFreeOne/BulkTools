@@ -16,11 +16,22 @@ Move yourself so that you are in the same directory as the DockerFile
 Run this command in the terminal :
 > docker build -t shiny_docker .
 
-2) To run the Docker, run this in the terminal :
-> docker run --rm \
-       -p 5288:5288 \
-       -e SHINY_PORT=5288 \
-       -e SHINY_ROOT_PATH=/browse \
-       -e SHINY_ROOT_NAME=home \
-       --mount type=bind,src="$HOME",target=/browse \
-       shiny_docker
+2) To run the Docker : 
+Edit root path "SHINY_ROOT_PATH" and "target" to the root from which you want to browse your local files.
+
+Run this in the terminal :
+FOR LINUX :
+> docker run --rm -p 5288:5288 \
+    -e SHINY_PORT=5288 \
+    -e SHINY_ROOT_PATH=/browse \
+    -e SHINY_ROOT_NAME=home \
+    -v /home/quentin/data:/browse \
+    shiny_docker
+
+FOR WINDOWS : 
+> docker run --rm -p 5288:5288 `
+    -e SHINY_PORT=5288 `
+    -e SHINY_ROOT_PATH=/browse `
+    -e SHINY_ROOT_NAME=home `
+    -v C:\Users\quentin\Documents:/browse `
+    shiny_docker
