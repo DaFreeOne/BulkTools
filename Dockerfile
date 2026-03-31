@@ -37,9 +37,6 @@ RUN wget --quiet https://github.com/conda-forge/miniforge/releases/latest/downlo
 
 WORKDIR /app
 COPY requirements_py.txt /app/requirements_py.txt
-COPY demarreur_app.R /app/demarreur_app.R
-COPY app/ /app/
-COPY REF_DATA/ /app/REF_DATA/
 
 # Créer l'env
 RUN conda create -y -n BulkTools -c conda-forge \
@@ -74,6 +71,10 @@ RUN conda install -y -n BulkTools \
 
 # test
 RUN conda run -n BulkTools R -q -e "library(shiny); library(shinyFiles); library(fs); library(optparse); library(tidyestimate); library(org.Hs.eg.db); library(tximport); library(GenomeInfoDb); library(AnnotationDbi); library(fgsea); library(GSVA); library(DESeq2); library(jsonlite); library(data.table); library(Matrix); cat('Docker image OK\\n')"
+
+COPY demarreur_app.R /app/demarreur_app.R
+COPY app/ /app/
+COPY REF_DATA/ /app/REF_DATA/
 
 
 EXPOSE 5288
