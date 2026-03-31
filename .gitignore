@@ -1,2 +1,8 @@
 __pycache__
 library
+test.ipynb
+REF_DATA/signatures/signatures.json
+REF_DATA/genesets_and_pathways/human_pathways.rds
+REF_DATA/genesets_and_pathways/c2_all_genesets.json
+.Rprofile
+py/requirements.txt
