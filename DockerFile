@@ -24,30 +24,37 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libhdf5-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN R -q -e "install.packages(c('pak','BiocManager','remotes'), repos='https://cloud.r-project.org')"
 
-RUN R -q -e "install.packages(c('optparse','tidyestimate','jsonlite','data.table','Seurat', 'Matrix'), repos='https://cloud.r-project.org', Ncpus=max(1, parallel::detectCores()-1))" &&\
-    R -q -e "library(optparse); library(tidyestimate); library(Seurat); library(jsonlite); library(data.table); library(Matrix)"
-            
+RUN         "conda create -n 'BulkTools' -c conda-forge r-base=4.4.3 python=3.13.7"
+RUN         "conda activate BulkTools"
+RUN         "pip install -r requirements_py.txt"
+RUN         "conda install conda-forge::r-shiny conda-forge::r-shinyFiles conda-forge::fs" &&\
+            "conda install bioconda::bioconductor-annotationdbi" &&\
+            "conda install bioconda::bioconductor-fgsea"
+
+RUN R -q -e "install.packages('BiocManager', repos='https://cloud.r-project.org')"
+
 RUN R -q -e "BiocManager::install('org.Hs.eg.db', ask=FALSE, update=FALSE)" &&\
+    R -q -e "BiocManager::install('tximport', ask=FALSE, update=FALSE)" &&\
+    R -q -e "BiocManager::install('GenomeInfoDb', ask=FALSE, update=FALSE)" &&\
+    R -q -e "BiocManager::install('AnnotationDbi', ask=FALSE, update=FALSE)" &&\
+    R -q -e "BiocManager::install('fgsea', ask=FALSE, update=FALSE)" &&\
+    R -q -e "BiocManager::install('GSVA', ask=FALSE, update=FALSE)" &&\
+    R -q -e "BiocManager::install('DESeq2', ask=FALSE, update=FALSE)" &&\
     R -q -e "library(org.Hs.eg.db)"
 
-RUN R -q -e "remotes::install_github('ebecht/MCPcounter', subdir='Source', upgrade='never', dependencies=FALSE)" &&\
-    R -q -e "library(MCPcounter)"
+RUN R -q -e "install.packages(c('optparse', 'ggplot2', 'tidyverse', 'dplyr', 'tidyestimate', 'DT', 'bslib', 'jsonlite','data.table', 'Matrix'), repos='https://cloud.r-project.org', Ncpus=max(1, parallel::detectCores()-1))" &&\
+    R -q -e "library(optparse); library(tidyestimate); library(jsonlite); library(data.table); library(Matrix)"
 
-# Installation du coeur d'Omnideconv
-RUN R -q -e "pak::pkg_install('omnideconv/omnideconv')" &&\
-    R -q -e "library(omnideconv)"
-
-# Installation des méthodes de déconvolution souhaitées
-RUN R -q -e "remotes::install_github('omnideconv/DWLS',  upgrade='never', dependencies=NA, build_vignettes=FALSE)"
-RUN R -q -e "remotes::install_github('omnideconv/MuSiC', upgrade='never', dependencies=NA, build_vignettes=FALSE)"
-RUN R -q -e "remotes::install_github('omnideconv/CDSeq', upgrade='never', dependencies=NA, build_vignettes=FALSE)"
 
 # Test si toutes les libs sont bien installées 
-RUN R -q -e "library(optparse); library(tidyestimate); library(MCPcounter); library(omnideconv); library(org.Hs.eg.db); library(Seurat); library(jsonlite); library(data.table); library(Matrix); cat('Docker image OK\\n')"
+RUN R -q -e "library(optparse); library(tidyestimate); library(org.Hs.eg.db); library(jsonlite); library(data.table); library(Matrix); cat('Docker image OK\\n')"
 
 WORKDIR /app
-COPY deconv_pipeline.R /app/deconv_pipeline.R
+COPY app/ /app/app
+COPY REF_DATA/ app/REF_DATA/
 
-ENTRYPOINT ["Rscript", "/app/deconv_pipeline.R"]
+EXPOSE 5288
+
+ENTRYPOINT ["R", "-e", "shiny::runApp('/app', host='0.0.0.0', port=5288, launch.browser=TRUE)"]
+
