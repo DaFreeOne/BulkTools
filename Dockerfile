@@ -1,6 +1,6 @@
 FROM rocker/r-ver:4.4.3
 
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -8,6 +8,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gfortran \
     cmake \
     git \
+    wget \
+    ca-certificates \
     pkg-config \
     libcurl4-openssl-dev \
     libssl-dev \
@@ -24,49 +26,56 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libhdf5-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Conda via Miniforge (plus propre pour conda-forge)
+ENV CONDA_DIR=/opt/conda
+ENV PATH=/opt/conda/bin:$PATH
+ENV R_HOME=
 
-# Installing conda
-ENV CONDA_DIR /opt/conda
-RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
-    /bin/bash ~/miniconda.sh -b -p /opt/conda
-
-# Put conda in paths
-ENV PATH=$CONDA_DIR/bin:$PATH
-
-# Setting conda env and downloading some R libraries through conda
-RUN         "conda create -n 'BulkTools' -c conda-forge r-base=4.4.3 python=3.13.7"
-RUN         "conda activate BulkTools"
-RUN         "conda install conda-forge::r-shiny conda-forge::r-shinyFiles conda-forge::fs" &&\
-            "conda install bioconda::bioconductor-annotationdbi" &&\
-            "conda install bioconda::bioconductor-fgsea"
-
-# Installing all required python packages listed in requirements_py.txt
-RUN         "pip install -r requirements_py.txt"
-
-# Downloading BiocManager and installing libraries through BiocManager
-RUN R -q -e "install.packages('BiocManager', repos='https://cloud.r-project.org')"
-RUN R -q -e "BiocManager::install('org.Hs.eg.db', ask=FALSE, update=FALSE)" &&\
-    R -q -e "BiocManager::install('tximport', ask=FALSE, update=FALSE)" &&\
-    R -q -e "BiocManager::install('GenomeInfoDb', ask=FALSE, update=FALSE)" &&\
-    R -q -e "BiocManager::install('AnnotationDbi', ask=FALSE, update=FALSE)" &&\
-    R -q -e "BiocManager::install('fgsea', ask=FALSE, update=FALSE)" &&\
-    R -q -e "BiocManager::install('GSVA', ask=FALSE, update=FALSE)" &&\
-    R -q -e "BiocManager::install('DESeq2', ask=FALSE, update=FALSE)" &&\
-    R -q -e "library(org.Hs.eg.db)"
-
-# Installing last R libs
-RUN R -q -e "install.packages(c('optparse', 'ggplot2', 'tidyverse', 'dplyr', 'tidyestimate', 'DT', 'bslib', 'jsonlite','data.table', 'Matrix'), repos='https://cloud.r-project.org', Ncpus=max(1, parallel::detectCores()-1))" &&\
-    R -q -e "library(optparse); library(tidyestimate); library(jsonlite); library(data.table); library(Matrix)"
-
-
-# Test si toutes les libs sont bien installées 
-RUN R -q -e "library(optparse); library(tidyestimate); library(org.Hs.eg.db); library(jsonlite); library(data.table); library(Matrix); cat('Docker image OK\\n')"
+RUN wget --quiet https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -O /tmp/miniforge.sh && \
+    /bin/bash /tmp/miniforge.sh -b -p /opt/conda && \
+    rm -f /tmp/miniforge.sh
 
 WORKDIR /app
-COPY app/ /app/app
-COPY REF_DATA/ app/REF_DATA/
+COPY requirements_py.txt /app/requirements_py.txt
+COPY demarreur_app.R /app/demarreur_app.R
+COPY app/ /app/
+COPY REF_DATA/ /app/REF_DATA/
+
+# Créer l'env
+RUN conda create -y -n BulkTools -c conda-forge \
+    r-base=4.4.3 \
+    python=3.12 \
+    pip
+
+# Paquets R "généraux" via conda-forge
+RUN conda run -n BulkTools conda install -y -c conda-forge \
+    r-shiny \
+    r-shinyfiles \
+    r-fs
+
+# Paquets Python
+RUN conda run -n BulkTools pip install --no-cache-dir -r /app/requirements_py.txt
+
+# CRAN-ish packages
+RUN conda run -n BulkTools R -q -e "install.packages(c('optparse','ggplot2','tidyverse','dplyr','tidyestimate','DT','bslib','jsonlite','data.table','Matrix'), repos='https://cloud.r-project.org', Ncpus=max(1, parallel::detectCores()-1))"
+
+# Download R libraries through conda bioconductor
+RUN conda install -y -n BulkTools \
+    --channel conda-forge \
+    --channel bioconda \
+    --strict-channel-priority \
+    bioconductor-org.hs.eg.db \
+    bioconductor-tximport \
+    bioconductor-genomeinfodb \
+    bioconductor-annotationdbi \
+    bioconductor-fgsea \
+    bioconductor-gsva \
+    bioconductor-deseq2
+
+# test
+RUN conda run -n BulkTools R -q -e "library(shiny); library(shinyFiles); library(fs); library(optparse); library(tidyestimate); library(org.Hs.eg.db); library(tximport); library(GenomeInfoDb); library(AnnotationDbi); library(fgsea); library(GSVA); library(DESeq2); library(jsonlite); library(data.table); library(Matrix); cat('Docker image OK\\n')"
+
 
 EXPOSE 5288
 
-ENTRYPOINT ["Rscript", "/app/demarreur_app.R"]
-
+ENTRYPOINT ["/opt/conda/envs/BulkTools/bin/Rscript", "/app/demarreur_app.R"]

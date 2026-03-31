@@ -2,17 +2,25 @@
 WITHOUT DOCKER:
 Run the app :
 1) Run in R terminal :
-R > shiny::runApp(host = "0.0.0.0", port = 5288, launch.browser = FALSE)
+> shiny::runApp(host = "0.0.0.0", port = 5288, launch.browser = FALSE)
 
 
 2) Open in browser :
-URL > http://localhost:5288
+> http://localhost:5288
 
 
 
 WITH DOCKER : 
 1) Build the Docker : 
 Move yourself so that you are in the same directory as the DockerFile
-sh > docker build -t shiny_docker .
+Run this command in the terminal :
+> docker build -t shiny_docker .
 
-2) Run the Docker :
+2) To run the Docker, run this in the terminal :
+> docker run --rm \
+       -p 5288:5288 \
+       -e SHINY_PORT=5288 \
+       -e SHINY_ROOT_PATH=/browse \
+       -e SHINY_ROOT_NAME=home \
+       --mount type=bind,src="$HOME",target=/browse \
+       shiny_docker
