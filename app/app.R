@@ -29,8 +29,8 @@ ui <- page_navbar(
 
 server <- function(input, output, session) {
   # roots <- c(home = "~")
-  volumes <- c(home = Sys.getenv("SHINY_ROOT_PATH", "/browse"))
-  shinyDirChoose(input, "dir", roots = volumes)
+  roots <- c(home = Sys.getenv("SHINY_ROOT_PATH", "/browse"))
+  shinyDirChoose(input, "dir", roots = roots)
 
   mod_degsea_server("degsea", roots = roots)
   mod_signature_proj_server("sign_proj", roots = roots)
