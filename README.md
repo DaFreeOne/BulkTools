@@ -26,12 +26,14 @@ FOR LINUX :
     -e SHINY_ROOT_PATH=/browse \
     -e SHINY_ROOT_NAME=home \
     -v /home/quentin/data:/browse \
-    shiny_docker
+    qtea1/shiny_docker
 
+    
 FOR WINDOWS : 
 > docker run --rm -p 5288:5288 `
     -e SHINY_PORT=5288 `
     -e SHINY_ROOT_PATH=/browse `
     -e SHINY_ROOT_NAME=home `
-    -v C:\Users\quentin\Documents:/browse `
-    shiny_docker
+    --mount type=bind,source="C:\Users\Quentin\Documents",target=/browse `
+    qtea1/shiny_docker
+
