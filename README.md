@@ -12,26 +12,23 @@
 
 # WITH DOCKER (recommanded) : 
 
-1. Get the docker image (two options): 
 ## Install Docker Desktop
 https://docs.docker.com/desktop/setup/install/windows-install/
 
-## Build the docker yourself
+## Build the docker yourself (option1) :
 Set yourself in the same directory as "Dockerfile" then run in the terminal :
 > docker build -t shiny_docker .
 
-## Pull the docker image from Dockerhub (recommanded):
+## Pull the docker image from Dockerhub (option2 recommanded):
 Run in the terminal :
 > docker pull qtea1/shiny_docker:latest
 
-2. Run the Docker : 
-## FOR WINDOWS (two options) : 
-### Click style (easiest) :
-Right click and execute as adminstrator on "windows_launcher.bat".
-Enjoy !
+## RUN FOR WINDOWS (two options) : 
+### Click style (option1 easiest) :
+Right click and execute as adminstrator on "windows_launcher.bat". \n
 nb : Default root for selecting an output path will be "C:\Users" so you might want to edit it to a customed path.
 
-### Run in powershell/terminal :
+### Run in powershell/terminal (option2) :
 > docker run --rm -p 5288:5288 `
     -e SHINY_PORT=5288 `
     -e SHINY_ROOT_PATH=/browse `
