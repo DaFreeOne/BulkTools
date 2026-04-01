@@ -17,15 +17,16 @@ https://docs.docker.com/desktop/setup/install/windows-install/
 
 ## Build the docker yourself (option1) :
 Set yourself in the same directory as "Dockerfile" then run in the terminal :
-> docker build -t shiny_docker .
+> docker build -t bulktools .
 
 ## Pull the docker image from Dockerhub (option2 recommanded):
 Run in the terminal :
-> docker pull qtea1/shiny_docker:latest
+> docker pull qtea1/bulktools:latest
 
 ## RUN FOR WINDOWS (two options) : 
 ### Click style (option1 easiest) :
-Right click and execute as adminstrator on "windows_launcher.bat". \n
+Right click and execute as adminstrator on "windows_launcher.bat".
+
 nb : Default root for selecting an output path will be "C:\Users" so you might want to edit it to a customed path.
 
 ### Run in powershell/terminal (option2) :
@@ -35,7 +36,7 @@ nb : Default root for selecting an output path will be "C:\Users" so you might w
     -e SHINY_ROOT_NAME=home `
     --mount type=bind,source="C:\Users\Quentin\Documents",target=/browse `
     --mount type=bind,source="C:\shiny_out",target=/out `
-    qtea1/shiny_docker
+    qtea1/bulktools
 nb : Default root for selecting an output path will be "C:\Users" so you might want to edit it to a customed path.
 
 
@@ -46,4 +47,4 @@ nb : Default root for selecting an output path will be "C:\Users" so you might w
     -e SHINY_ROOT_NAME=home \
     -v /home/quentin:/browse \
     -v /home:/out \
-    qtea1/shiny_docker
+    qtea1/bulktools
