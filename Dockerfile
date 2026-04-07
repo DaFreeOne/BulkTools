@@ -38,24 +38,35 @@ RUN wget --quiet https://github.com/conda-forge/miniforge/releases/latest/downlo
 WORKDIR /app
 COPY requirements_py.txt /app/requirements_py.txt
 
-# Créer l'env
+# Créer l'env conda
 RUN conda create -y -n BulkTools -c conda-forge \
     r-base=4.4.3 \
     python=3.12 \
     pip
 
-# Paquets R "généraux" via conda-forge
+# Paquets R fondamentaux installés via conda-forge
 RUN conda run -n BulkTools conda install -y -c conda-forge \
     r-shiny \
     r-shinyfiles \
-    r-fs
+    r-fs \
+    r-glmnet \
+    r-survminer \
+    r-survival \
+    r-optparse \
+    r-ggplot2 \
+    r-dplyr \
+    r-dt \
+    r-bslib \
+    r-jsonlite \
+    r-data.table \
+    r-matrix
 
-# Paquets Python
+# Packages Python
 RUN conda run -n BulkTools pip install --no-cache-dir -r /app/requirements_py.txt
 
-# CRAN-ish packages
-RUN conda run -n BulkTools R -q -e "install.packages(c('optparse','ggplot2','dplyr','tidyestimate','DT','bslib','jsonlite','data.table','Matrix'), repos='https://cloud.r-project.org', Ncpus=max(1, parallel::detectCores()-1))"
-
+# CRAN packages
+RUN conda run -n BulkTools R -q -e "install.packages(c('tidyestimate'), repos='https://cloud.r-project.org', Ncpus=max(1, parallel::detectCores()-1))"
+    
 # Download R libraries through conda bioconductor
 RUN conda install -y -n BulkTools \
     --channel conda-forge \

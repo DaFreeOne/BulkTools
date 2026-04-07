@@ -8,10 +8,11 @@ signature_proj_pipe = function(rnafilt_counts, clinic_annot,
                                 survival_time_col = "delpfs", event_realization_col = "PFS", 
                                 sample_ID_col = "ID_Patient", group_quantile = "median"){
     library(reticulate)
-    use_condaenv("BulkTools", required = TRUE)
+
+    use_python("/opt/conda/envs/BulkTools/bin/python", required = TRUE)
     source_python("py/py_plots.py")
     source_python("py/py_models.py")
-    
+
     parsed_design = "nul"
 
     # Filtering samples on selected gene's expression and clinic features
